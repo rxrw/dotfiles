@@ -1,0 +1,4 @@
+.gnupg/pubring.kbx
+.gnupg/sshcontrol
+.ssh/config
+.wakatime.cfg

@@ -1,0 +1,22 @@
+[user]
+	email = 9566402+rxrw@users.noreply.github.com
+	name = rxrw
+	signingKey = 9F00D3E0D4028332
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[protocol]
+	version = 2
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[init]
+	defaultBranch = main
+[core]
+	editor = vim
+	excludesfile = /Users/i/.gitignore_global
+[commit]
+	gpgsign = false
