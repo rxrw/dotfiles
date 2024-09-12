@@ -1,0 +1,5 @@
+.gnupg/private-keys-v1.d/*.key
+.gnupg/pubring.kbx
+.gnupg/sshcontrol
+.ssh/config
+.wakatime.cfg
