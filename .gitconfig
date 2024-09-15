@@ -1,7 +1,7 @@
 [user]
 	email = 9566402+rxrw@users.noreply.github.com
 	name = rxrw
-	signingKey = E22F1DEE07BB0F3A
+	signingKey = 9F00D3E0D4028332
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
