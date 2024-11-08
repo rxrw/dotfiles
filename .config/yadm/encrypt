@@ -2,3 +2,4 @@
 .gnupg/sshcontrol
 .ssh/config
 .wakatime.cfg
+~/.oh-my-zsh/custom/secrets.zsh
