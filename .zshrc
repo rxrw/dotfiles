@@ -132,3 +132,10 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# GPG-Agent
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+fi
+
+export GPG_TTY=$(tty)
