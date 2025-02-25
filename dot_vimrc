@@ -1,0 +1,107 @@
+autocmd BufWritePost ~/.local/share/chezmoi/* ! chezmoi apply --source-path "%"
+
+syntax on
+
+set number                      " Show line numbers
+set backspace=indent,eol,start  " Makes backspace key more powerful.
+set showcmd                     " Show me what I'm typing
+
+set noswapfile                  " Don't use swapfile
+set nobackup					          " Don't create annoying backup files
+set nowritebackup
+set encoding=UTF-8              " Set default encoding to UTF-8
+
+set ruler                       " Show the cursor position all the time
+
+set fileformats=unix,mac,dos    " Prefer Unix over OS 9 over Windows formats
+
+set incsearch                   " Shows the match while typing
+set hlsearch                    " Highlight found searches
+set ignorecase                  " Search case insensitive...
+set smartcase                   " ... but not when search pattern contains upper case characters
+set ttyfast                     " Optimize for fast terminal connections
+
+" do not hide markdown
+set conceallevel=0
+
+" Make Vim to handle long lines nicely.
+set wrap
+set textwidth=80
+set formatoptions=qrn1
+
+" Do not use relative numbers to where the cursor is.
+set norelativenumber
+
+" Apply the indentation of the current line to the next line.
+set autoindent
+set smartindent
+set complete-=i
+set showmatch
+set smarttab
+
+" Make tabs as wide as two spaces
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+
+" Use the OS clipboard by default (on versions compiled with `+clipboard`)
+" yank to clipboard
+if has("clipboard")
+  set clipboard=unnamed " copy to the system clipboard
+
+  if has("unnamedplus") " X11 support
+    set clipboard+=unnamedplus
+  endif
+endif
+
+" Show 120 character line limit
+if exists('+colorcolumn')
+  set colorcolumn=120
+else
+  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
+
+" ----------------------------------------- "
+" File Type settings          			    		"
+" ----------------------------------------- "
+
+au BufNewFile,BufRead *.md setlocal spell noet ts=2 sw=2
+au BufNewFile,BufRead *.yml,*.yaml setlocal expandtab ts=2 sw=2
+au BufNewFile,BufRead *.json setlocal expandtab ts=2 sw=2
+
+augroup filetypedetect
+  au BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
+augroup END
+
+au FileType nginx setlocal noet ts=2 sw=2 sts=2
+
+" Go settings
+au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
+
+" Dockerfile settings
+autocmd FileType dockerfile set noexpandtab
+
+" shell/config/systemd settings
+autocmd FileType fstab,systemd set noexpandtab
+autocmd FileType gitconfig,sh,toml set noexpandtab
+
+" python indent
+autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 smarttab expandtab
+
+" For all text files set 'textwidth' to 80 characters.
+autocmd FileType text setlocal textwidth=80 fo+=2t ts=2 sw=2 sts=2 expandtab
+autocmd BufNewFile,BufRead *.md,*.txt,*.adoc setlocal textwidth=80 fo+=2t ts=2 sw=2 sts=2 expandtab
+
+" toml settings
+au BufRead,BufNewFile MAINTAINERS,*.toml set ft=toml formatprg=toml-fmt
+
+" hcl settings
+au BufRead,BufNewFile *.workflow set ft=hcl
+
+" spell check for git commits
+autocmd FileType gitcommit setlocal spell

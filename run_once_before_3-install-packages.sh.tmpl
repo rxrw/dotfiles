@@ -1,0 +1,25 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+  echo "Oh My Zsh is already installed, skipping..."
+else
+  echo "Oh My Zsh is not installed, proceeding with the installation..."
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+{{ end -}}
+
+brew bundle --file=/dev/stdin <<EOF
+{{ range .packages.darwin.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .packages.darwin.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+{{ range .packages.darwin.mases -}}
+mas {{ .id}}
+{{ end -}}
+EOF
+
+brew cleanup

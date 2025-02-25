@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ ! -f "${HOME}/.config/chezmoi/key.txt" ]; then
+    mkdir -p "${HOME}/.config/chezmoi"
+    chezmoi age decrypt --output "${HOME}/.config/chezmoi/key.txt" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
+    chmod 600 "${HOME}/.config/chezmoi/key.txt"
+fi
+
+chezmoi age decrypt --output "{{ .chezmoi.sourceDir }}/keys/home.gpg" --passphrase "{{ .chezmoi.sourceDir }}/keys/home.gpg.age"
+chezmoi age decrypt --output "{{ .chezmoi.sourceDir }}/keys/rc.gpg" --passphrase "{{ .chezmoi.sourceDir }}/keys/rc.gpg.age"

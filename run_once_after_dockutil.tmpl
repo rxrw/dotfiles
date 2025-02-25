@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+dockutil --remove "com.apple.Maps" --no-restart
+dockutil --remove "com.apple.MobileSMS" --no-restart
+dockutil --remove "com.apple.FaceTime" --no-restart
+dockutil --remove "com.apple.AddressBook" --no-restart
+dockutil --remove "com.apple.freeform" --no-restart
+dockutil --remove "com.apple.TV" --no-restart
+dockutil --remove "com.apple.news" --no-restart
+dockutil --add --replacing "/Applications/Notion.app"
+dockutil --add --replacing "/Applications/WeChat.app"
+dockutil --add --replacing "/Applications/iTerm.app"

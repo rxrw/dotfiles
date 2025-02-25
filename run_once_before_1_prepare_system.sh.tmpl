@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gpg --import {{ .chezmoi.sourceDir }}/keys/*.asc
+gpg --import {{ .chezmoi.sourceDir }}/keys/*.gpg
