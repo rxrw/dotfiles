@@ -1,0 +1,7 @@
+{
+    "window.commandCenter": 1,
+    "git.enableSmartCommit": true,
+    "[shellscript]": {
+        "editor.defaultFormatter": null
+    },
+}

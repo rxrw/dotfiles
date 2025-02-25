@@ -1,0 +1,61 @@
+#!/bin/bash
+
+CERT_PATH="{{ .chezmoi.sourceDir }}/certs/rootCA.crt"
+CERT_NAME="HOMESELFCERT"
+
+{{ if eq .chezmoi.os "darwin" -}}
+echo "Installing certificate on macOS..."
+
+# 将证书添加到系统钥匙串
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$CERT_PATH"
+
+# 更新信任设置
+sudo /usr/bin/security trust-settings-update
+
+echo "Certificate installed and trusted. Some applications may need to be restarted to apply the changes."
+
+{{ else if eq .chezmoi.os "linux" -}}
+echo "Installing certificate on Linux..."
+
+# 检测发行版类型
+if [ -f /etc/debian_version ]; then
+    # Debian/Ubuntu
+    sudo cp "$CERT_PATH" /usr/local/share/ca-certificates/$CERT_NAME.crt
+    sudo update-ca-certificates
+elif [ -f /etc/redhat-release ]; then
+    # RHEL/CentOS/Fedora
+    sudo cp "$CERT_PATH" /etc/pki/ca-trust/source/anchors/$CERT_NAME.crt
+    sudo update-ca-trust extract
+else
+    # 通用方法
+    sudo cp "$CERT_PATH" /etc/ssl/certs/$CERT_NAME.crt
+    sudo update-ca-certificates 2>/dev/null || echo "Failed to automatically update certificates, please manually configure the system to trust this certificate"
+fi
+
+echo "Certificate installed."
+
+{{ else if eq .chezmoi.os "windows" -}}
+echo "Installing certificate on Windows..."
+
+# 创建临时PowerShell脚本
+TEMP_PS_SCRIPT=$(mktemp)
+cat > "$TEMP_PS_SCRIPT" << 'PSEOF'
+$certPath = $args[0]
+$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($certPath)
+$store = New-Object System.Security.Cryptography.X509Certificates.X509Store("Root", "LocalMachine")
+$store.Open("ReadWrite")
+$store.Add($cert)
+$store.Close()
+Write-Host "Certificate installed and trusted."
+PSEOF
+
+# 以管理员权限执行PowerShell脚本
+powershell -ExecutionPolicy Bypass -Command "Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -File \"$TEMP_PS_SCRIPT\" \"$CERT_PATH\"' -Verb RunAs"
+
+# 清理临时文件
+rm "$TEMP_PS_SCRIPT"
+
+{{ else -}}
+echo "Unsupported operating system: {{ .chezmoi.os }}"
+echo "Please install the certificate manually: $CERT_PATH"
+{{ end -}}
